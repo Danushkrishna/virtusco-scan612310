@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -9,7 +8,7 @@ import { Badge } from '@/components/ui/badge';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { UserProfile as UserProfileType, HEALTH_CONDITIONS, COMMON_ALLERGIES, DIETARY_RESTRICTIONS } from '@/types/health';
 import { useToast } from '@/hooks/use-toast';
-import { Heart, Sparkles, ArrowRight, Skip } from 'lucide-react';
+import { Heart, Sparkles, ArrowRight } from 'lucide-react';
 
 interface OnboardingFlowProps {
   onComplete: (profile: UserProfileType) => void;
@@ -135,7 +134,7 @@ const OnboardingFlow: React.FC<OnboardingFlowProps> = ({ onComplete, onSkip }) =
               </div>
               <div className="flex gap-2 pt-4">
                 <Button variant="outline" onClick={onSkip} className="flex-1">
-                  <Skip className="mr-2 h-4 w-4" />
+                  <ArrowRight className="mr-2 h-4 w-4" />
                   Skip Setup
                 </Button>
                 <Button onClick={handleNext} className="flex-1 bg-emerald-600 hover:bg-emerald-700">
