@@ -7,16 +7,19 @@ import FoodScanner from '@/components/FoodScanner';
 import ScanResults from '@/components/ScanResults';
 import ProductHistory from '@/components/ProductHistory';
 import HealthScoreDashboard from '@/components/HealthScoreDashboard';
+import OnboardingFlow from '@/components/OnboardingFlow';
+import SettingsPage from '@/components/SettingsPage';
 import { UserProfile as UserProfileType, ScannedProduct } from '@/types/health';
 import { analyzeFoodProduct } from '@/utils/foodAnalysis';
 import { useToast } from '@/hooks/use-toast';
-import { Camera, User, Search, TrendingUp } from 'lucide-react';
+import { Camera, User, Search, TrendingUp, Settings } from 'lucide-react';
 
 const Index = () => {
   const [userProfile, setUserProfile] = useState<UserProfileType | null>(null);
+  const [showOnboarding, setShowOnboarding] = useState(false);
   const [currentProduct, setCurrentProduct] = useState<ScannedProduct | null>(null);
   const [productHistory, setProductHistory] = useState<ScannedProduct[]>([]);
-  const [activeTab, setActiveTab] = useState('profile');
+  const [activeTab, setActiveTab] = useState('scanner');
   const [isAnalyzing, setIsAnalyzing] = useState(false);
   const { toast } = useToast();
 
@@ -24,10 +27,12 @@ const Index = () => {
   useEffect(() => {
     const savedProfile = localStorage.getItem('healthProfile');
     const savedHistory = localStorage.getItem('productHistory');
+    const hasCompletedOnboarding = localStorage.getItem('hasCompletedOnboarding');
     
     if (savedProfile) {
       setUserProfile(JSON.parse(savedProfile));
-      setActiveTab('scanner');
+    } else if (!hasCompletedOnboarding) {
+      setShowOnboarding(true);
     }
     
     if (savedHistory) {
@@ -35,11 +40,32 @@ const Index = () => {
     }
   }, []);
 
-  // Save profile to localStorage
-  const handleProfileSaved = (profile: UserProfileType) => {
+  // Handle onboarding completion
+  const handleOnboardingComplete = (profile: UserProfileType) => {
     setUserProfile(profile);
     localStorage.setItem('healthProfile', JSON.stringify(profile));
-    setActiveTab('scanner');
+    localStorage.setItem('hasCompletedOnboarding', 'true');
+    setShowOnboarding(false);
+    toast({
+      title: "Welcome to HealthScan! 🎉",
+      description: "Your profile is set up. Start scanning for healthier choices!",
+    });
+  };
+
+  // Skip onboarding
+  const handleSkipOnboarding = () => {
+    localStorage.setItem('hasCompletedOnboarding', 'true');
+    setShowOnboarding(false);
+  };
+
+  // Handle profile updates from settings
+  const handleProfileUpdate = (profile: UserProfileType) => {
+    setUserProfile(profile);
+    localStorage.setItem('healthProfile', JSON.stringify(profile));
+    toast({
+      title: "Profile Updated",
+      description: "Your health profile has been updated successfully.",
+    });
   };
 
   // Handle image capture and analysis
@@ -50,6 +76,7 @@ const Index = () => {
         description: "Please complete your health profile first.",
         variant: "destructive"
       });
+      setActiveTab('settings');
       return;
     }
 
@@ -103,6 +130,15 @@ const Index = () => {
     });
   };
 
+  if (showOnboarding) {
+    return (
+      <OnboardingFlow 
+        onComplete={handleOnboardingComplete}
+        onSkip={handleSkipOnboarding}
+      />
+    );
+  }
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-emerald-50 to-blue-50">
       {/* Header */}
@@ -128,53 +164,41 @@ const Index = () => {
       {/* Main Content */}
       <div className="max-w-4xl mx-auto p-4">
         <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-          <TabsList className="grid w-full grid-cols-4 mb-6">
-            <TabsTrigger value="profile" className="flex items-center gap-2">
-              <User className="h-4 w-4" />
-              Profile
-            </TabsTrigger>
-            <TabsTrigger value="scanner" className="flex items-center gap-2" disabled={!userProfile}>
+          <TabsList className="grid w-full grid-cols-5 mb-6">
+            <TabsTrigger value="scanner" className="flex items-center gap-2">
               <Camera className="h-4 w-4" />
-              Scanner
+              Scan
             </TabsTrigger>
-            <TabsTrigger value="health-score" className="flex items-center gap-2" disabled={!userProfile}>
+            <TabsTrigger value="health-score" className="flex items-center gap-2">
               <TrendingUp className="h-4 w-4" />
-              Health Score
+              Score
             </TabsTrigger>
             <TabsTrigger value="history" className="flex items-center gap-2">
               <Search className="h-4 w-4" />
               History
             </TabsTrigger>
+            <TabsTrigger value="settings" className="flex items-center gap-2">
+              <Settings className="h-4 w-4" />
+              Settings
+            </TabsTrigger>
+            <TabsTrigger value="results" className="flex items-center gap-2" disabled={!currentProduct}>
+              Results
+            </TabsTrigger>
           </TabsList>
 
-          <TabsContent value="profile">
-            <UserProfile 
-              onProfileSaved={handleProfileSaved}
-              existingProfile={userProfile}
-            />
-          </TabsContent>
-
           <TabsContent value="scanner">
-            {!userProfile ? (
-              <div className="text-center py-12">
-                <h3 className="text-lg font-medium text-gray-900 mb-2">
-                  Complete Your Health Profile
-                </h3>
-                <p className="text-gray-500 mb-4">
-                  Set up your profile first to get personalized food analysis.
-                </p>
-                <Button onClick={() => setActiveTab('profile')}>
-                  Create Profile
-                </Button>
-              </div>
-            ) : isAnalyzing ? (
+            {isAnalyzing ? (
               <div className="text-center py-12">
                 <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-emerald-600 mx-auto mb-4"></div>
                 <h3 className="text-lg font-medium text-gray-900 mb-2">Analyzing Product...</h3>
                 <p className="text-gray-500">This may take a few moments</p>
               </div>
             ) : (
-              <FoodScanner onImageCaptured={handleImageCaptured} />
+              <FoodScanner 
+                onImageCaptured={handleImageCaptured} 
+                userProfile={userProfile}
+                productHistory={productHistory}
+              />
             )}
           </TabsContent>
 
@@ -187,7 +211,7 @@ const Index = () => {
                 <p className="text-gray-500 mb-4">
                   Set up your profile first to see your health score.
                 </p>
-                <Button onClick={() => setActiveTab('profile')}>
+                <Button onClick={() => setActiveTab('settings')}>
                   Create Profile
                 </Button>
               </div>
@@ -207,6 +231,13 @@ const Index = () => {
             />
           </TabsContent>
 
+          <TabsContent value="settings">
+            <SettingsPage 
+              userProfile={userProfile}
+              onProfileUpdate={handleProfileUpdate}
+            />
+          </TabsContent>
+
           <TabsContent value="results">
             {currentProduct && (
               <ScanResults 
@@ -218,16 +249,6 @@ const Index = () => {
           </TabsContent>
         </Tabs>
       </div>
-
-      {/* Quick Access Notice */}
-      {!userProfile && (
-        <div className="fixed bottom-4 right-4 bg-emerald-600 text-white p-4 rounded-lg shadow-lg max-w-sm">
-          <h4 className="font-medium mb-1">Welcome to HealthScan!</h4>
-          <p className="text-sm opacity-90">
-            Set up your health profile to start scanning food products safely.
-          </p>
-        </div>
-      )}
     </div>
   );
 };
