@@ -1,3 +1,4 @@
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -37,47 +38,32 @@
     --radius: 0.5rem;
 
     --sidebar-background: 0 0% 98%;
-
     --sidebar-foreground: 240 5.3% 26.1%;
-
     --sidebar-primary: 240 5.9% 10%;
-
     --sidebar-primary-foreground: 0 0% 98%;
-
     --sidebar-accent: 240 4.8% 95.9%;
-
     --sidebar-accent-foreground: 240 5.9% 10%;
-
     --sidebar-border: 220 13% 91%;
-
     --sidebar-ring: 217.2 91.2% 59.8%;
   }
 
   .dark {
     --background: 222.2 84% 4.9%;
     --foreground: 210 40% 98%;
-
     --card: 222.2 84% 4.9%;
     --card-foreground: 210 40% 98%;
-
     --popover: 222.2 84% 4.9%;
     --popover-foreground: 210 40% 98%;
-
     --primary: 210 40% 98%;
     --primary-foreground: 222.2 47.4% 11.2%;
-
     --secondary: 217.2 32.6% 17.5%;
     --secondary-foreground: 210 40% 98%;
-
     --muted: 217.2 32.6% 17.5%;
     --muted-foreground: 215 20.2% 65.1%;
-
     --accent: 217.2 32.6% 17.5%;
     --accent-foreground: 210 40% 98%;
-
     --destructive: 0 62.8% 30.6%;
     --destructive-foreground: 210 40% 98%;
-
     --border: 217.2 32.6% 17.5%;
     --input: 217.2 32.6% 17.5%;
     --ring: 212.7 26.8% 83.9%;
@@ -99,5 +85,109 @@
 
   body {
     @apply bg-background text-foreground;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    min-height: 100vh;
+  }
+}
+
+/* Futuristic animations and effects */
+@layer utilities {
+  .floating-food {
+    position: fixed;
+    pointer-events: none;
+    z-index: 1;
+    opacity: 0.8;
+    animation: float 15s infinite linear;
+  }
+
+  .floating-food-1 {
+    top: 10%;
+    left: -50px;
+    animation-delay: 0s;
+  }
+
+  .floating-food-2 {
+    top: 30%;
+    right: -50px;
+    animation-delay: -3s;
+    animation-direction: reverse;
+  }
+
+  .floating-food-3 {
+    top: 60%;
+    left: -50px;
+    animation-delay: -6s;
+  }
+
+  .floating-food-4 {
+    top: 80%;
+    right: -50px;
+    animation-delay: -9s;
+    animation-direction: reverse;
+  }
+
+  .floating-food-5 {
+    top: 45%;
+    left: -50px;
+    animation-delay: -12s;
+  }
+
+  @keyframes float {
+    0% {
+      transform: translateX(0) rotate(0deg) scale(0.8);
+    }
+    25% {
+      transform: translateX(25vw) rotate(90deg) scale(1);
+    }
+    50% {
+      transform: translateX(50vw) rotate(180deg) scale(0.9);
+    }
+    75% {
+      transform: translateX(75vw) rotate(270deg) scale(1.1);
+    }
+    100% {
+      transform: translateX(100vw) rotate(360deg) scale(0.8);
+    }
+  }
+
+  .glass-card {
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(20px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+  }
+
+  .neon-glow {
+    box-shadow: 0 0 20px rgba(34, 197, 94, 0.5), 0 0 40px rgba(34, 197, 94, 0.3);
+  }
+
+  .scan-pulse {
+    animation: scan-pulse 2s infinite;
+  }
+
+  @keyframes scan-pulse {
+    0%, 100% {
+      box-shadow: 0 0 20px rgba(34, 197, 94, 0.5);
+      transform: scale(1);
+    }
+    50% {
+      box-shadow: 0 0 40px rgba(34, 197, 94, 0.8), 0 0 60px rgba(34, 197, 94, 0.4);
+      transform: scale(1.05);
+    }
+  }
+
+  .holographic {
+    background: linear-gradient(45deg, #00ff88, #00ccff, #ff00cc, #ffaa00);
+    background-size: 400% 400%;
+    animation: holographic 4s ease-in-out infinite;
+  }
+
+  @keyframes holographic {
+    0%, 100% {
+      background-position: 0% 50%;
+    }
+    50% {
+      background-position: 100% 50%;
+    }
   }
 }

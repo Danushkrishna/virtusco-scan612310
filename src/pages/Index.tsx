@@ -9,6 +9,7 @@ import ProductHistory from '@/components/ProductHistory';
 import HealthScoreDashboard from '@/components/HealthScoreDashboard';
 import OnboardingFlow from '@/components/OnboardingFlow';
 import SettingsPage from '@/components/SettingsPage';
+import FloatingFood from '@/components/FloatingFood';
 import { UserProfile as UserProfileType, ScannedProduct } from '@/types/health';
 import { analyzeFoodProduct } from '@/utils/foodAnalysis';
 import { useToast } from '@/hooks/use-toast';
@@ -132,124 +133,132 @@ const Index = () => {
 
   if (showOnboarding) {
     return (
-      <OnboardingFlow 
-        onComplete={handleOnboardingComplete}
-        onSkip={handleSkipOnboarding}
-      />
+      <>
+        <FloatingFood />
+        <OnboardingFlow 
+          onComplete={handleOnboardingComplete}
+          onSkip={handleSkipOnboarding}
+        />
+      </>
     );
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-emerald-50 to-blue-50">
-      {/* Header */}
-      <div className="bg-white shadow-sm border-b">
-        <div className="max-w-4xl mx-auto px-4 py-4">
-          <div className="flex items-center justify-between">
-            <div>
-              <h1 className="text-2xl font-bold text-emerald-700">HealthScan</h1>
-              <p className="text-sm text-gray-600">Smart food analysis for your health</p>
-            </div>
-            {userProfile && (
-              <div className="text-right">
-                <p className="text-sm font-medium">{userProfile.weight} {userProfile.weightUnit}</p>
-                <p className="text-xs text-gray-500">
-                  {userProfile.healthConditions.length + userProfile.allergies.length} conditions tracked
-                </p>
+    <>
+      <FloatingFood />
+      <div className="min-h-screen relative overflow-hidden">
+        {/* Futuristic Header */}
+        <div className="glass-card border-b border-white/20 relative z-10">
+          <div className="max-w-4xl mx-auto px-4 py-6">
+            <div className="flex items-center justify-between">
+              <div>
+                <h1 className="text-3xl font-bold bg-gradient-to-r from-green-400 to-blue-500 bg-clip-text text-transparent">
+                  HealthScan AI
+                </h1>
+                <p className="text-sm text-white/70">Next-gen food intelligence</p>
               </div>
-            )}
+              {userProfile && (
+                <div className="text-right glass-card px-4 py-2 rounded-xl">
+                  <p className="text-sm font-medium text-white">{userProfile.weight} {userProfile.weightUnit}</p>
+                  <p className="text-xs text-green-400">
+                    {userProfile.healthConditions.length + userProfile.allergies.length} conditions monitored
+                  </p>
+                </div>
+              )}
+            </div>
           </div>
         </div>
-      </div>
 
-      {/* Main Content */}
-      <div className="max-w-4xl mx-auto p-4">
-        <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-          <TabsList className="grid w-full grid-cols-5 mb-6">
-            <TabsTrigger value="scanner" className="flex items-center gap-2">
-              <Camera className="h-4 w-4" />
-              Scan
-            </TabsTrigger>
-            <TabsTrigger value="health-score" className="flex items-center gap-2">
-              <TrendingUp className="h-4 w-4" />
-              Score
-            </TabsTrigger>
-            <TabsTrigger value="history" className="flex items-center gap-2">
-              <Search className="h-4 w-4" />
-              History
-            </TabsTrigger>
-            <TabsTrigger value="settings" className="flex items-center gap-2">
-              <Settings className="h-4 w-4" />
-              Settings
-            </TabsTrigger>
-            <TabsTrigger value="results" className="flex items-center gap-2" disabled={!currentProduct}>
-              Results
-            </TabsTrigger>
-          </TabsList>
+        {/* Main Content */}
+        <div className="max-w-4xl mx-auto p-4 relative z-10">
+          <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
+            <TabsList className="grid w-full grid-cols-5 mb-6 glass-card border border-white/20">
+              <TabsTrigger value="scanner" className="flex items-center gap-2 data-[state=active]:bg-green-500/20 data-[state=active]:text-green-400">
+                <Camera className="h-4 w-4" />
+                Scan
+              </TabsTrigger>
+              <TabsTrigger value="health-score" className="flex items-center gap-2 data-[state=active]:bg-blue-500/20 data-[state=active]:text-blue-400">
+                <TrendingUp className="h-4 w-4" />
+                Score
+              </TabsTrigger>
+              <TabsTrigger value="history" className="flex items-center gap-2 data-[state=active]:bg-purple-500/20 data-[state=active]:text-purple-400">
+                <Search className="h-4 w-4" />
+                History
+              </TabsTrigger>
+              <TabsTrigger value="settings" className="flex items-center gap-2 data-[state=active]:bg-orange-500/20 data-[state=active]:text-orange-400">
+                <Settings className="h-4 w-4" />
+                Settings
+              </TabsTrigger>
+              <TabsTrigger value="results" className="flex items-center gap-2" disabled={!currentProduct}>
+                Results
+              </TabsTrigger>
+            </TabsList>
 
-          <TabsContent value="scanner">
-            {isAnalyzing ? (
-              <div className="text-center py-12">
-                <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-emerald-600 mx-auto mb-4"></div>
-                <h3 className="text-lg font-medium text-gray-900 mb-2">Analyzing Product...</h3>
-                <p className="text-gray-500">This may take a few moments</p>
-              </div>
-            ) : (
-              <FoodScanner 
-                onImageCaptured={handleImageCaptured} 
+            <TabsContent value="scanner">
+              {isAnalyzing ? (
+                <div className="text-center py-12 glass-card rounded-2xl">
+                  <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-green-400 mx-auto mb-4"></div>
+                  <h3 className="text-lg font-medium text-white mb-2">AI Analysis in Progress...</h3>
+                  <p className="text-white/70">Scanning molecular composition</p>
+                </div>
+              ) : (
+                <FoodScanner 
+                  onImageCaptured={handleImageCaptured} 
+                  userProfile={userProfile}
+                  productHistory={productHistory}
+                />
+              )}
+            </TabsContent>
+
+            <TabsContent value="health-score">
+              {!userProfile ? (
+                <div className="text-center py-12 glass-card rounded-2xl">
+                  <h3 className="text-lg font-medium text-white mb-2">
+                    Initialize Health Profile
+                  </h3>
+                  <p className="text-white/70 mb-4">
+                    Configure your bio-metrics for personalized analysis.
+                  </p>
+                  <Button onClick={() => setActiveTab('settings')} className="holographic text-white font-semibold">
+                    Initialize Profile
+                  </Button>
+                </div>
+              ) : (
+                <HealthScoreDashboard 
+                  scannedProducts={productHistory}
+                  userProfile={userProfile}
+                />
+              )}
+            </TabsContent>
+
+            <TabsContent value="history">
+              <ProductHistory 
+                products={productHistory}
+                onProductSelect={handleProductSelect}
+                onClearHistory={handleClearHistory}
+              />
+            </TabsContent>
+
+            <TabsContent value="settings">
+              <SettingsPage 
                 userProfile={userProfile}
-                productHistory={productHistory}
+                onProfileUpdate={handleProfileUpdate}
               />
-            )}
-          </TabsContent>
+            </TabsContent>
 
-          <TabsContent value="health-score">
-            {!userProfile ? (
-              <div className="text-center py-12">
-                <h3 className="text-lg font-medium text-gray-900 mb-2">
-                  Complete Your Health Profile
-                </h3>
-                <p className="text-gray-500 mb-4">
-                  Set up your profile first to see your health score.
-                </p>
-                <Button onClick={() => setActiveTab('settings')}>
-                  Create Profile
-                </Button>
-              </div>
-            ) : (
-              <HealthScoreDashboard 
-                scannedProducts={productHistory}
-                userProfile={userProfile}
-              />
-            )}
-          </TabsContent>
-
-          <TabsContent value="history">
-            <ProductHistory 
-              products={productHistory}
-              onProductSelect={handleProductSelect}
-              onClearHistory={handleClearHistory}
-            />
-          </TabsContent>
-
-          <TabsContent value="settings">
-            <SettingsPage 
-              userProfile={userProfile}
-              onProfileUpdate={handleProfileUpdate}
-            />
-          </TabsContent>
-
-          <TabsContent value="results">
-            {currentProduct && (
-              <ScanResults 
-                product={currentProduct}
-                onScanAnother={handleScanAnother}
-                onSaveToHistory={handleSaveToHistory}
-              />
-            )}
-          </TabsContent>
-        </Tabs>
+            <TabsContent value="results">
+              {currentProduct && (
+                <ScanResults 
+                  product={currentProduct}
+                  onScanAnother={handleScanAnother}
+                  onSaveToHistory={handleSaveToHistory}
+                />
+              )}
+            </TabsContent>
+          </Tabs>
+        </div>
       </div>
-    </div>
+    </>
   );
 };
 
