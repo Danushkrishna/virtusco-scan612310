@@ -146,7 +146,7 @@ const Index = () => {
   return (
     <>
       <FloatingFood />
-      <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50">
+      <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50 vegetable-outline-bg">
         {/* Minimalistic Header */}
         <div className="bg-white/80 backdrop-blur-sm border-b border-gray-100 sticky top-0 z-50 slide-in-up">
           <div className="max-w-6xl mx-auto px-6 py-4">

@@ -159,17 +159,17 @@
     box-shadow: 0 8px 32px rgba(0, 0, 0, 0.04), 0 4px 16px rgba(0, 0, 0, 0.02);
   }
 
-  /* Soft floating bounce */
+  /* Calm floating bounce - much slower and gentler */
   .float-bounce {
-    animation: float-bounce 3s ease-in-out infinite;
+    animation: float-bounce-calm 6s ease-in-out infinite;
   }
 
-  @keyframes float-bounce {
+  @keyframes float-bounce-calm {
     0%, 100% {
       transform: translateY(0px);
     }
     50% {
-      transform: translateY(-8px);
+      transform: translateY(-4px);
     }
   }
 
@@ -262,5 +262,15 @@
   /* Card hover effects */
   .card-hover {
     @apply transition-all duration-300 hover:shadow-lg hover:-translate-y-1;
+  }
+
+  /* Vegetable outline background */
+  .vegetable-outline-bg {
+    background-image: 
+      url("data:image/svg+xml,%3Csvg width='100' height='100' viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M20 20c10-5 20-5 30 0s20 5 30 0' stroke='%2334d399' stroke-width='0.5' fill='none' opacity='0.1'/%3E%3Cpath d='M15 50c15-10 30-10 45 0s30 10 45 0' stroke='%2338bdf8' stroke-width='0.5' fill='none' opacity='0.1'/%3E%3Cpath d='M10 80c20-8 40-8 60 0s40 8 60 0' stroke='%2334d399' stroke-width='0.5' fill='none' opacity='0.1'/%3E%3C/svg%3E"),
+      url("data:image/svg+xml,%3Csvg width='80' height='80' viewBox='0 0 80 80' xmlns='http://www.w3.org/2000/svg'%3E%3Ccircle cx='20' cy='20' r='3' stroke='%2334d399' stroke-width='0.5' fill='none' opacity='0.08'/%3E%3Ccircle cx='60' cy='40' r='2' stroke='%2338bdf8' stroke-width='0.5' fill='none' opacity='0.08'/%3E%3Ccircle cx='40' cy='70' r='2.5' stroke='%2334d399' stroke-width='0.5' fill='none' opacity='0.08'/%3E%3C/svg%3E");
+    background-size: 200px 200px, 160px 160px;
+    background-position: 0 0, 50px 50px;
+    background-repeat: repeat;
   }
 }
