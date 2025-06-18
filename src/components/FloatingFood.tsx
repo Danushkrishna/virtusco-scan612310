@@ -12,8 +12,8 @@ const FloatingFood: React.FC = () => {
         return (
           <div key={index} className={`floating-food floating-food-${index}`}>
             <IconComponent 
-              size={32} 
-              className="text-green-400 opacity-60 drop-shadow-lg" 
+              size={24} 
+              className="text-green-300 opacity-30" 
             />
           </div>
         );

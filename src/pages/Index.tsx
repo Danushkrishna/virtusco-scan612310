@@ -13,7 +13,7 @@ import FloatingFood from '@/components/FloatingFood';
 import { UserProfile as UserProfileType, ScannedProduct } from '@/types/health';
 import { analyzeFoodProduct } from '@/utils/foodAnalysis';
 import { useToast } from '@/hooks/use-toast';
-import { Camera, User, Search, TrendingUp, Settings } from 'lucide-react';
+import { Camera, User, Search, TrendingUp, Settings, Heart } from 'lucide-react';
 
 const Index = () => {
   const [userProfile, setUserProfile] = useState<UserProfileType | null>(null);
@@ -146,22 +146,25 @@ const Index = () => {
   return (
     <>
       <FloatingFood />
-      <div className="min-h-screen relative overflow-hidden">
-        {/* Futuristic Header */}
-        <div className="glass-card border-b border-white/20 relative z-10">
-          <div className="max-w-4xl mx-auto px-4 py-6">
+      <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50">
+        {/* Minimalistic Header */}
+        <div className="bg-white/80 backdrop-blur-sm border-b border-gray-100 sticky top-0 z-50 slide-in-up">
+          <div className="max-w-6xl mx-auto px-6 py-4">
             <div className="flex items-center justify-between">
-              <div>
-                <h1 className="text-3xl font-bold bg-gradient-to-r from-green-400 to-blue-500 bg-clip-text text-transparent">
-                  HealthScan AI
-                </h1>
-                <p className="text-sm text-white/70">Next-gen food intelligence</p>
+              <div className="flex items-center space-x-3">
+                <div className="w-10 h-10 bg-gradient-to-br from-green-400 to-green-600 rounded-full flex items-center justify-center float-bounce">
+                  <Heart className="h-5 w-5 text-white" />
+                </div>
+                <div>
+                  <h1 className="text-2xl font-bold text-gray-900">HealthScan</h1>
+                  <p className="text-sm text-gray-500">Smart nutrition for life</p>
+                </div>
               </div>
               {userProfile && (
-                <div className="text-right glass-card px-4 py-2 rounded-xl">
-                  <p className="text-sm font-medium text-white">{userProfile.weight} {userProfile.weightUnit}</p>
-                  <p className="text-xs text-green-400">
-                    {userProfile.healthConditions.length + userProfile.allergies.length} conditions monitored
+                <div className="bg-white rounded-2xl px-4 py-2 shadow-sm border border-gray-100 slide-in-right">
+                  <p className="text-sm font-medium text-gray-900">{userProfile.weight} {userProfile.weightUnit}</p>
+                  <p className="text-xs text-green-600">
+                    {userProfile.healthConditions.length + userProfile.allergies.length} conditions tracked
                   </p>
                 </div>
               )}
@@ -170,36 +173,38 @@ const Index = () => {
         </div>
 
         {/* Main Content */}
-        <div className="max-w-4xl mx-auto p-4 relative z-10">
+        <div className="max-w-6xl mx-auto p-6">
           <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-            <TabsList className="grid w-full grid-cols-5 mb-6 glass-card border border-white/20">
-              <TabsTrigger value="scanner" className="flex items-center gap-2 data-[state=active]:bg-green-500/20 data-[state=active]:text-green-400">
-                <Camera className="h-4 w-4" />
+            <TabsList className="grid w-full grid-cols-5 mb-8 bg-white/70 backdrop-blur-sm border border-gray-200 p-1 rounded-2xl shadow-sm">
+              <TabsTrigger value="scanner" className="rounded-xl data-[state=active]:bg-green-500 data-[state=active]:text-white data-[state=active]:shadow-md transition-all duration-200">
+                <Camera className="h-4 w-4 mr-2" />
                 Scan
               </TabsTrigger>
-              <TabsTrigger value="health-score" className="flex items-center gap-2 data-[state=active]:bg-blue-500/20 data-[state=active]:text-blue-400">
-                <TrendingUp className="h-4 w-4" />
+              <TabsTrigger value="health-score" className="rounded-xl data-[state=active]:bg-blue-500 data-[state=active]:text-white data-[state=active]:shadow-md transition-all duration-200">
+                <TrendingUp className="h-4 w-4 mr-2" />
                 Score
               </TabsTrigger>
-              <TabsTrigger value="history" className="flex items-center gap-2 data-[state=active]:bg-purple-500/20 data-[state=active]:text-purple-400">
-                <Search className="h-4 w-4" />
+              <TabsTrigger value="history" className="rounded-xl data-[state=active]:bg-purple-500 data-[state=active]:text-white data-[state=active]:shadow-md transition-all duration-200">
+                <Search className="h-4 w-4 mr-2" />
                 History
               </TabsTrigger>
-              <TabsTrigger value="settings" className="flex items-center gap-2 data-[state=active]:bg-orange-500/20 data-[state=active]:text-orange-400">
-                <Settings className="h-4 w-4" />
+              <TabsTrigger value="settings" className="rounded-xl data-[state=active]:bg-orange-500 data-[state=active]:text-white data-[state=active]:shadow-md transition-all duration-200">
+                <Settings className="h-4 w-4 mr-2" />
                 Settings
               </TabsTrigger>
-              <TabsTrigger value="results" className="flex items-center gap-2" disabled={!currentProduct}>
+              <TabsTrigger value="results" className="rounded-xl" disabled={!currentProduct}>
                 Results
               </TabsTrigger>
             </TabsList>
 
-            <TabsContent value="scanner">
+            <TabsContent value="scanner" className="slide-in-up">
               {isAnalyzing ? (
-                <div className="text-center py-12 glass-card rounded-2xl">
-                  <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-green-400 mx-auto mb-4"></div>
-                  <h3 className="text-lg font-medium text-white mb-2">AI Analysis in Progress...</h3>
-                  <p className="text-white/70">Scanning molecular composition</p>
+                <div className="text-center py-16 bg-white rounded-3xl shadow-sm border border-gray-100">
+                  <div className="w-16 h-16 bg-gradient-to-br from-green-400 to-green-600 rounded-full flex items-center justify-center mx-auto mb-6 float-bounce">
+                    <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-white"></div>
+                  </div>
+                  <h3 className="text-xl font-semibold text-gray-900 mb-2">Analyzing your food...</h3>
+                  <p className="text-gray-500">Getting personalized health insights</p>
                 </div>
               ) : (
                 <FoodScanner 
@@ -210,17 +215,20 @@ const Index = () => {
               )}
             </TabsContent>
 
-            <TabsContent value="health-score">
+            <TabsContent value="health-score" className="slide-in-up">
               {!userProfile ? (
-                <div className="text-center py-12 glass-card rounded-2xl">
-                  <h3 className="text-lg font-medium text-white mb-2">
-                    Initialize Health Profile
+                <div className="text-center py-16 bg-white rounded-3xl shadow-sm border border-gray-100">
+                  <div className="w-16 h-16 bg-gradient-to-br from-blue-400 to-blue-600 rounded-full flex items-center justify-center mx-auto mb-6">
+                    <User className="h-8 w-8 text-white" />
+                  </div>
+                  <h3 className="text-xl font-semibold text-gray-900 mb-2">
+                    Complete Your Profile
                   </h3>
-                  <p className="text-white/70 mb-4">
-                    Configure your bio-metrics for personalized analysis.
+                  <p className="text-gray-500 mb-6">
+                    Set up your health profile for personalized insights
                   </p>
-                  <Button onClick={() => setActiveTab('settings')} className="holographic text-white font-semibold">
-                    Initialize Profile
+                  <Button onClick={() => setActiveTab('settings')} className="primary-button">
+                    Get Started
                   </Button>
                 </div>
               ) : (
@@ -231,7 +239,7 @@ const Index = () => {
               )}
             </TabsContent>
 
-            <TabsContent value="history">
+            <TabsContent value="history" className="slide-in-up">
               <ProductHistory 
                 products={productHistory}
                 onProductSelect={handleProductSelect}
@@ -239,14 +247,14 @@ const Index = () => {
               />
             </TabsContent>
 
-            <TabsContent value="settings">
+            <TabsContent value="settings" className="slide-in-up">
               <SettingsPage 
                 userProfile={userProfile}
                 onProfileUpdate={handleProfileUpdate}
               />
             </TabsContent>
 
-            <TabsContent value="results">
+            <TabsContent value="results" className="slide-in-up">
               {currentProduct && (
                 <ScanResults 
                   product={currentProduct}
